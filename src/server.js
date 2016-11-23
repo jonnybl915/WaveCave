@@ -7,6 +7,7 @@
 
 const Hapi = require('hapi')
 const Inert = require('inert')
+const Mongojs = require('mongojs')
 
 const server = new Hapi.Server()
 server.connection({
@@ -20,7 +21,7 @@ server.register([
   require('./routes/filters')], (err) => {
     if (err) { throw err }
   }
-])
+)
 
 
 /***********************
