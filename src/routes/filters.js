@@ -54,7 +54,6 @@ exports.register = (server, options, next) => {
 
 
 
-
 /***********************
 * this defines a new Hapi plugin called 'routes-filters'
 ***********************/
