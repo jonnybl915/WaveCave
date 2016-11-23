@@ -1,0 +1,22 @@
+{
+  "name": "wave_cave",
+  "version": "1.0.0",
+  "description": "audio filters",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WaveCave/WaveCave.git"
+  },
+  "keywords": [
+    "filter"
+  ],
+  "author": "Jon Black and Caleb Bodtorf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WaveCave/WaveCave/issues"
+  },
+  "homepage": "https://github.com/WaveCave/WaveCave#readme"
+}
