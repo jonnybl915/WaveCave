@@ -4,12 +4,14 @@
   "description": "audio filters",
   "main": "index.js",
   "scripts": {
-    "go": "npm-run-all --parallel watch-css dev api mongo",
+
+    "go": "npm-run-all --parallel watch-css dev api mongo && echo '\n\n===== watching js and scss files in src/, writing changes to public/ =====\n\n'",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-css": "./node_modules/.bin/node-sass -w --output-style compressed src/styles/style.scss public/css/style.css&",
+    "watch-css": "./node_modules/.bin/node-sass -w --output-style compressed src/styles/style.scss public/css/style.css",
     "dev": "webpack-dev-server",
     "api": "node ./src/server.js",
     "mongo": "mongod"
+
   },
   "repository": {
     "type": "git",
@@ -29,9 +31,10 @@
     "hapi": "^15.2.0",
     "inert": "^4.0.2",
     "joi": "^10.0.1",
-    "node-sass": "^3.13.0",
     "mongojs": "^2.4.0",
+    "node-sass": "^3.13.0",
     "node-uuid": "^1.4.7",
+    "nodemon": "^1.11.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   },
