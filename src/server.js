@@ -22,6 +22,7 @@ server.register([
   }
 ])
 
+
 /***********************
 *  DATABASE
 * // the db is on a remote server (the port default to mongo)
@@ -52,6 +53,7 @@ server.route({
     }
   }
 })
+
 
 // Start it up!
 server.start((err) => {
