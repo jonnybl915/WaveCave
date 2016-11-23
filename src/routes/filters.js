@@ -36,7 +36,28 @@ exports.register = (server, options, next) => {
     path: '/filters/{id}',
 
     handler(request, reply) {
-      
+      db.filters.findOne(
+        { _id: request.params.id },
+        (err, data) => {
+          if ( err ) { return reply( Boom.wrap(err, 'Internal MongoDB error') ) }
+          if ( data ) { return reply( Boom.notFound() ) }
+
+          reply( data )
+        })
+
     }
   })
+
+
+  return next()
+}
+
+
+
+
+/***********************
+* this defines a new Hapi plugin called 'routes-filters'
+***********************/
+exports.register.attributes = {
+  name: 'routes-filters'
 }
