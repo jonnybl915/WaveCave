@@ -4,7 +4,9 @@
   "description": "audio filters",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "go": "npm run dev && npm run api && npm run watch-css && mongod",
+    "dev": "webpack-dev-server",
+    "api": "node ./src/server.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +27,7 @@
     "hapi": "^15.2.0",
     "inert": "^4.0.2",
     "joi": "^10.0.1",
+    "mongojs": "^2.4.0",
     "node-uuid": "^1.4.7",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
