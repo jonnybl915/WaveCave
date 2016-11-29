@@ -1,7 +1,7 @@
-import React, {Component, PropTypes} from 'react'
+// import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import Backbone from 'backbone'
-import ViewTemplate from './view-controller.js'
+import AppViewController from './app-view-controller.js'
 
 const AppRouter = Backbone.Router.extend({
   routes: {
@@ -11,11 +11,11 @@ const AppRouter = Backbone.Router.extend({
 
   ShowHomeView: function() {
     console.log("hitting home page")
-    ReactDOM.render(<ViewTemplate/>)
+    ReactDOM.render(<AppViewController routedFrom="HomeView"/>, document.querySelector('#app-conainer'))
   },
 
   ShowMakeFilterPage: function(){
-
+    ReactDOM.render(<AppViewController routedFrom="MakeFilterView"/>, document.querySelector('#app-conainer'))
   },
 
   initialize: function(){

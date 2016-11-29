@@ -1305,13 +1305,11 @@
 
 /***/ },
 /* 12 */
-=======
->>>>>>> e0d422a582200212a09e139961b0b5ea8a96d5e6
+
 /***/ function(module, exports) {
 
 	"use strict";
 
-<<<<<<< HEAD
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
 	 * All rights reserved.
@@ -21460,7 +21458,6 @@
 	module.exports = ReactDOMInvalidARIAHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
-=======
->>>>>>> e0d422a582200212a09e139961b0b5ea8a96d5e6
+
 /***/ }
 /******/ ]);

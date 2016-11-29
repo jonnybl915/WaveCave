@@ -8,7 +8,7 @@ export default class AppViewController extends Component {
   super(props);
   }
 
-  render: function(){
+  render() {
 
         switch (this.props.routedFrom){
 
