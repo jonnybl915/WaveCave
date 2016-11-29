@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
-import HomeView from './homeview.component.js'
+import HomeView from './home-view.component.js'
+import MakeFilterView from './make-filter-view.component.js'
 
 export default class AppViewController extends Component {
 
