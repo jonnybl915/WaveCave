@@ -8,7 +8,7 @@ export default class HomeView extends Component {
 
   render() {
     return <div className="audioClipInputBox">
-           ${AudioInputComponent}
+           {AudioInputComponent}
            </div>
   }
 }
