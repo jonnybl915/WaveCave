@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import HomeView from './homeview.component.js'
 
-class AppViewController extends Component {
+export default class AppViewController extends Component {
 
   constructor(props) {
   super(props);
@@ -21,5 +21,3 @@ class AppViewController extends Component {
         }
      }
 }
-
-module.exports = AppViewController
