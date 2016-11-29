@@ -1,3 +1,4 @@
+
 module.exports = {
   entry: './src/scripts/app.js',
   output: {
@@ -5,6 +6,7 @@ module.exports = {
     filename: 'app.js'
   },
   devServer: {
+    contentBase: "./public",
     inline: true,
     port: 4444
   },
