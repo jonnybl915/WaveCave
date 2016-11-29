@@ -46,6 +46,10 @@
 
 	'use strict';
 
+	var _react = __webpack_require__(181);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _reactDom = __webpack_require__(1);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
@@ -68,18 +72,17 @@
 
 	  ShowHomeView: function ShowHomeView() {
 	    console.log("hitting home page");
-	    _reactDom2.default.render(React.createElement(_appViewController2.default, { routedFrom: 'HomeView' }), document.querySelector('#app-conainer'));
+	    _reactDom2.default.render(_react2.default.createElement(_appViewController2.default, { routedFrom: 'HomeView' }), document.getElementById('#app-conainer'));
 	  },
 
 	  ShowMakeFilterPage: function ShowMakeFilterPage() {
-	    _reactDom2.default.render(React.createElement(_appViewController2.default, { routedFrom: 'MakeFilterView' }), document.querySelector('#app-conainer'));
+	    _reactDom2.default.render(_react2.default.createElement(_appViewController2.default, { routedFrom: 'MakeFilterView' }), document.getElementById('#app-conainer'));
 	  },
 
 	  initialize: function initialize() {
 	    _backbone2.default.history.start();
 	  }
-	}); // import React, {Component, PropTypes} from 'react'
-
+	});
 
 	var app = new AppRouter();
 
