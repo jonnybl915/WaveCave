@@ -35306,7 +35306,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'audioClipInputBox' },
-	        _audioInputComponent2.default
+	        _react2.default.createElement(_audioInputComponent2.default, null)
 	      );
 	    }
 	  }]);
