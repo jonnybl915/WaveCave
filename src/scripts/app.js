@@ -11,11 +11,11 @@ const AppRouter = Backbone.Router.extend({
 
   ShowHomeView: function() {
     console.log("hitting home page")
-    ReactDOM.render(<AppViewController routedFrom="HomeView"/>, document.getElementById('#app-conainer'))
+    ReactDOM.render(<AppViewController routedFrom="HomeView"/>, document.querySelector('#app-container'))
   },
 
   ShowMakeFilterPage: function(){
-    ReactDOM.render(<AppViewController routedFrom="MakeFilterView"/>, document.getElementById('#app-conainer'))
+    ReactDOM.render(<AppViewController routedFrom="MakeFilterView"/>, document.querySelector('#app-container'))
   },
 
   initialize: function(){
