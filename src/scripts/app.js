@@ -7,7 +7,7 @@ import AppViewController from './app-view-controller.js'
 const AppRouter = Backbone.Router.extend({
   routes: {
     "" : "ShowHomeView",
-    "makeFilterPage" : "ShowMakeFilterPage"
+    "makeFilterPage" : "ShowMakeFilterPage",
     "sourceNodePage" : "sourceNodePage"
   },
 
