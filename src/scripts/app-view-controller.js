@@ -21,6 +21,10 @@ export default class AppViewController extends Component {
            case "MakeFilterView":
               return <MakeFilterView/>
               break;
+
+           case "SourceNode":
+              return <SourceNode/>
+              break;
         }
      }
 }

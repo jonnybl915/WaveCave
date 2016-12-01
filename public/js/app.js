@@ -21676,6 +21676,10 @@
 	            case "MakeFilterView":
 	               return _react2.default.createElement(_makeFilterViewComponent2.default, null);
 	               break;
+
+	            case "SourceNode":
+	               return _react2.default.createElement(_sourceNodeComponent2.default, null);
+	               break;
 	         }
 	      }
 	   }]);
