@@ -54,11 +54,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _backbone = __webpack_require__(183);
+	var _backbone = __webpack_require__(178);
 
 	var _backbone2 = _interopRequireDefault(_backbone);
 
-	var _appViewController = __webpack_require__(179);
+	var _appViewController = __webpack_require__(181);
 
 	var _appViewController2 = _interopRequireDefault(_appViewController);
 
@@ -208,25 +208,40 @@
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
 	(function () {
 	    try {
-	        cachedSetTimeout = setTimeout;
-	    } catch (e) {
-	        cachedSetTimeout = function () {
-	            throw new Error('setTimeout is not defined');
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
 	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
 	    }
 	    try {
-	        cachedClearTimeout = clearTimeout;
-	    } catch (e) {
-	        cachedClearTimeout = function () {
-	            throw new Error('clearTimeout is not defined');
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
 	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
 	    }
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
 	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
 	        return setTimeout(fun, 0);
 	    }
 	    try {
@@ -247,6 +262,11 @@
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
 	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
 	        return clearTimeout(marker);
 	    }
 	    try {
@@ -21481,335 +21501,6 @@
 /* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SourceNode = function (_Component) {
-	  _inherits(SourceNode, _Component);
-
-	  function SourceNode(props) {
-	    _classCallCheck(this, SourceNode);
-
-	    var _this = _possibleConstructorReturn(this, (SourceNode.__proto__ || Object.getPrototypeOf(SourceNode)).call(this, props));
-
-	    var self = _this;
-
-	    fetch(_this.props.url).then(function (resp) {
-	      return resp.arrayBuffer();
-	    }).then(function (arrayBuffer) {
-	      return _this.props.audioCtx.decodeAudioData(arrayBuffer);
-	    }).then(function (audioBuffer) {
-	      /***************************
-	      * The Phasing effect will a form of the moiré pattern:
-	      * Two simple identical geometrical patterns are superimposed to give rise
-	      * to something much more complex than the original.
-	      * --- *
-	      * Here we are using two audio loops.
-	      ***************************/
-	      self.state = {
-	        audioBuffer: audioBuffer,
-	        nodes: []
-	      };
-	    }).catch(function (err) {
-	      return console.log(err);
-	    });
-
-	    console.log(_this);
-	    return _this;
-	  }
-
-	  _createClass(SourceNode, [{
-	    key: '_playNode',
-	    value: function _playNode() {
-	      console.log(this.state);
-	      this.startLoop(this.state.audioBuffer, -1);
-	      // this.startLoop(this.state.audioBuffer, 1, 1.002)
-	    }
-	  }, {
-	    key: '_stopNode',
-	    value: function _stopNode(srcNode) {
-	      console.log(this);
-	      this.state.nodes.forEach(function (e) {
-	        console.log('eh', e);
-	        e.stop();
-	      });
-	    }
-	  }, {
-	    key: 'startLoop',
-	    value: function startLoop(audioBuffer) {
-	      var pan = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-	      var rate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-
-	      console.log('test');
-	      var srcNode = this.props.audioCtx.createBufferSource();
-	      var panNode = this.props.audioCtx.createStereoPanner();
-	      /***************************
-	      * create nodes and chain them to destination
-	      * set loop start/end. Then play loop
-	      * --- *
-	      * this is the basic Web Audio API flow
-	      * 2 node audio-processing graph
-	      ***************************/
-	      srcNode.buffer = audioBuffer;
-	      srcNode.loop = true;
-	      srcNode.loopStart = 14.98;
-	      srcNode.loopEnd = 15.80;
-	      srcNode.playbackRate.value = rate;
-
-	      panNode.pan.value = pan;
-
-	      srcNode.connect(panNode);
-	      panNode.connect(this.props.audioCtx.destination);
-	      /***************************
-	      * @param when to start playing. 0 means immediately.
-	      * @param offset at which to start. Set to beginning of loop.
-	      ***************************/
-
-	      srcNode.start(0, srcNode.loopStart);
-
-	      var nodes = this.state.nodes.map(function (e) {
-	        return e;
-	      });
-	      nodes.push(srcNode);
-	      this.setState({ nodes: nodes });
-	      console.log('end of play', this.state);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'button',
-	          { onClick: this._playNode.bind(this) },
-	          'Play'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { ref: 'stopBtn', onClick: this._stopNode.bind(this) },
-	          'Stop'
-	        )
-	      );
-	    }
-	  }]);
-
-	  return SourceNode;
-	}(_react.Component);
-
-	exports.default = SourceNode;
-
-
-	SourceNode.defaultProps = {
-	  url: '../jackals.wav',
-	  audioCtx: new AudioContext()
-	};
-
-/***/ },
-/* 179 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _homeViewComponent = __webpack_require__(180);
-
-	var _homeViewComponent2 = _interopRequireDefault(_homeViewComponent);
-
-	var _makeFilterViewComponent = __webpack_require__(182);
-
-	var _makeFilterViewComponent2 = _interopRequireDefault(_makeFilterViewComponent);
-
-	var _sourceNodeComponent = __webpack_require__(178);
-
-	var _sourceNodeComponent2 = _interopRequireDefault(_sourceNodeComponent);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var AppViewController = function (_Component) {
-	   _inherits(AppViewController, _Component);
-
-	   function AppViewController(props) {
-	      _classCallCheck(this, AppViewController);
-
-	      return _possibleConstructorReturn(this, (AppViewController.__proto__ || Object.getPrototypeOf(AppViewController)).call(this, props));
-	   }
-
-	   _createClass(AppViewController, [{
-	      key: 'render',
-	      value: function render() {
-
-	         switch (this.props.routedFrom) {
-
-	            case "HomeView":
-	               return _react2.default.createElement(_homeViewComponent2.default, null);
-	               break;
-
-	            case "MakeFilterView":
-	               return _react2.default.createElement(_makeFilterViewComponent2.default, null);
-	               break;
-
-	            case "SourceNode":
-	               return _react2.default.createElement(_sourceNodeComponent2.default, null);
-	               break;
-	         }
-	      }
-	   }]);
-
-	   return AppViewController;
-	}(_react.Component);
-
-	exports.default = AppViewController;
-
-/***/ },
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _audioInputComponent = __webpack_require__(181);
-
-	var _audioInputComponent2 = _interopRequireDefault(_audioInputComponent);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HomeView = function (_Component) {
-	  _inherits(HomeView, _Component);
-
-	  function HomeView(props) {
-	    _classCallCheck(this, HomeView);
-
-	    return _possibleConstructorReturn(this, (HomeView.__proto__ || Object.getPrototypeOf(HomeView)).call(this, props));
-	  }
-
-	  _createClass(HomeView, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'audioClipInputBox' },
-	        _react2.default.createElement(_audioInputComponent2.default, null)
-	      );
-	    }
-	  }]);
-
-	  return HomeView;
-	}(_react.Component);
-
-	exports.default = HomeView;
-
-/***/ },
-/* 181 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var AudioInputComponent = function (_Component) {
-	  _inherits(AudioInputComponent, _Component);
-
-	  function AudioInputComponent(props) {
-	    _classCallCheck(this, AudioInputComponent);
-
-	    return _possibleConstructorReturn(this, (AudioInputComponent.__proto__ || Object.getPrototypeOf(AudioInputComponent)).call(this, props));
-	  }
-
-	  _createClass(AudioInputComponent, [{
-	    key: "render",
-	    value: function render() {
-
-	      return _react2.default.createElement(
-	        "div",
-	        { className: "audioInputForm" },
-	        _react2.default.createElement(
-	          "button",
-	          { id: "uploadAudioButton", className: "uploadAudioButton" },
-	          "Upload Audio"
-	        )
-	      );
-	    }
-	  }]);
-
-	  return AudioInputComponent;
-	}(_react.Component);
-
-	exports.default = AudioInputComponent;
-
-/***/ },
-/* 182 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-/***/ },
-/* 183 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {//     Backbone.js 1.3.3
 
 	//     (c) 2010-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -21826,7 +21517,7 @@
 
 	  // Set up Backbone appropriately for the environment. Start with AMD.
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(184), __webpack_require__(185), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(179), __webpack_require__(180), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
 	      // Export global even in AMD case in case this script is loaded with
 	      // others that may still expect a global Backbone.
 	      root.Backbone = factory(root, exports, _, $);
@@ -23734,7 +23425,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 184 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -25288,7 +24979,7 @@
 
 
 /***/ },
-/* 185 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -35512,6 +35203,335 @@
 	return jQuery;
 	} );
 
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _homeViewComponent = __webpack_require__(182);
+
+	var _homeViewComponent2 = _interopRequireDefault(_homeViewComponent);
+
+	var _makeFilterViewComponent = __webpack_require__(184);
+
+	var _makeFilterViewComponent2 = _interopRequireDefault(_makeFilterViewComponent);
+
+	var _sourceNodeComponent = __webpack_require__(185);
+
+	var _sourceNodeComponent2 = _interopRequireDefault(_sourceNodeComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AppViewController = function (_Component) {
+	   _inherits(AppViewController, _Component);
+
+	   function AppViewController(props) {
+	      _classCallCheck(this, AppViewController);
+
+	      return _possibleConstructorReturn(this, (AppViewController.__proto__ || Object.getPrototypeOf(AppViewController)).call(this, props));
+	   }
+
+	   _createClass(AppViewController, [{
+	      key: 'render',
+	      value: function render() {
+
+	         switch (this.props.routedFrom) {
+
+	            case "HomeView":
+	               return _react2.default.createElement(_homeViewComponent2.default, null);
+	               break;
+
+	            case "MakeFilterView":
+	               return _react2.default.createElement(_makeFilterViewComponent2.default, null);
+	               break;
+
+	            case "SourceNode":
+	               return _react2.default.createElement(_sourceNodeComponent2.default, null);
+	               break;
+	         }
+	      }
+	   }]);
+
+	   return AppViewController;
+	}(_react.Component);
+
+	exports.default = AppViewController;
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _audioInputComponent = __webpack_require__(183);
+
+	var _audioInputComponent2 = _interopRequireDefault(_audioInputComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HomeView = function (_Component) {
+	  _inherits(HomeView, _Component);
+
+	  function HomeView(props) {
+	    _classCallCheck(this, HomeView);
+
+	    return _possibleConstructorReturn(this, (HomeView.__proto__ || Object.getPrototypeOf(HomeView)).call(this, props));
+	  }
+
+	  _createClass(HomeView, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'audioClipInputBox' },
+	        _react2.default.createElement(_audioInputComponent2.default, null)
+	      );
+	    }
+	  }]);
+
+	  return HomeView;
+	}(_react.Component);
+
+	exports.default = HomeView;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AudioInputComponent = function (_Component) {
+	  _inherits(AudioInputComponent, _Component);
+
+	  function AudioInputComponent(props) {
+	    _classCallCheck(this, AudioInputComponent);
+
+	    return _possibleConstructorReturn(this, (AudioInputComponent.__proto__ || Object.getPrototypeOf(AudioInputComponent)).call(this, props));
+	  }
+
+	  _createClass(AudioInputComponent, [{
+	    key: "render",
+	    value: function render() {
+
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "audioInputForm" },
+	        _react2.default.createElement(
+	          "button",
+	          { id: "uploadAudioButton", className: "uploadAudioButton" },
+	          "Upload Audio"
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AudioInputComponent;
+	}(_react.Component);
+
+	exports.default = AudioInputComponent;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SourceNode = function (_Component) {
+	  _inherits(SourceNode, _Component);
+
+	  function SourceNode(props) {
+	    _classCallCheck(this, SourceNode);
+
+	    var _this = _possibleConstructorReturn(this, (SourceNode.__proto__ || Object.getPrototypeOf(SourceNode)).call(this, props));
+
+	    var self = _this;
+
+	    fetch(_this.props.url).then(function (resp) {
+	      return resp.arrayBuffer();
+	    }).then(function (arrayBuffer) {
+	      return _this.props.audioCtx.decodeAudioData(arrayBuffer);
+	    }).then(function (audioBuffer) {
+	      /***************************
+	      * The Phasing effect will a form of the moiré pattern:
+	      * Two simple identical geometrical patterns are superimposed to give rise
+	      * to something much more complex than the original.
+	      * --- *
+	      * Here we are using two audio loops.
+	      ***************************/
+	      self.state = {
+	        audioBuffer: audioBuffer,
+	        nodes: []
+	      };
+	    }).catch(function (err) {
+	      return console.log(err);
+	    });
+
+	    console.log(_this);
+	    return _this;
+	  }
+
+	  _createClass(SourceNode, [{
+	    key: '_playNode',
+	    value: function _playNode() {
+	      console.log(this.state);
+	      this.startLoop(this.state.audioBuffer, -1);
+	      // this.startLoop(this.state.audioBuffer, 1, 1.002)
+	    }
+	  }, {
+	    key: '_stopNode',
+	    value: function _stopNode(srcNode) {
+	      console.log(this);
+	      this.state.nodes.forEach(function (e) {
+	        console.log('eh', e);
+	        e.stop();
+	      });
+	    }
+	  }, {
+	    key: 'startLoop',
+	    value: function startLoop(audioBuffer) {
+	      var pan = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+	      var rate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+	      console.log('test');
+	      var srcNode = this.props.audioCtx.createBufferSource();
+	      var panNode = this.props.audioCtx.createStereoPanner();
+	      /***************************
+	      * create nodes and chain them to destination
+	      * set loop start/end. Then play loop
+	      * --- *
+	      * this is the basic Web Audio API flow
+	      * 2 node audio-processing graph
+	      ***************************/
+	      srcNode.buffer = audioBuffer;
+	      srcNode.loop = true;
+	      srcNode.loopStart = 14.98;
+	      srcNode.loopEnd = 15.80;
+	      srcNode.playbackRate.value = rate;
+
+	      panNode.pan.value = pan;
+
+	      srcNode.connect(panNode);
+	      panNode.connect(this.props.audioCtx.destination);
+	      /***************************
+	      * @param when to start playing. 0 means immediately.
+	      * @param offset at which to start. Set to beginning of loop.
+	      ***************************/
+
+	      srcNode.start(0, srcNode.loopStart);
+
+	      var nodes = this.state.nodes.map(function (e) {
+	        return e;
+	      });
+	      nodes.push(srcNode);
+	      this.setState({ nodes: nodes });
+	      console.log('end of play', this.state);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this._playNode.bind(this) },
+	          'Play'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { ref: 'stopBtn', onClick: this._stopNode.bind(this) },
+	          'Stop'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SourceNode;
+	}(_react.Component);
+
+	exports.default = SourceNode;
+
+
+	SourceNode.defaultProps = {
+	  url: '../jackals.wav',
+	  audioCtx: new AudioContext()
+	};
 
 /***/ }
 /******/ ]);

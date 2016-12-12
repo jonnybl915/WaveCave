@@ -7,6 +7,7 @@ export default class AudioUploadModal extends Component {
   }
 
   render() {
+
     return <div className="audioModalBox">
              <h6>Drag Audiofile To Upload</h6>
                 <input></input>
