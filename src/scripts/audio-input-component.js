@@ -9,7 +9,7 @@ export default class AudioInputComponent extends Component {
   render() {
 
     return <div className="audioInputForm">
-            <button id="uploadAudioButton" className="uploadAudioButton">Upload Audio</button>
+            <input type="file" accept="audio/*" className="uploadAudioButton"></input>
            </div>
   }
 

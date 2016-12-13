@@ -35224,11 +35224,11 @@
 
 	var _homeViewComponent2 = _interopRequireDefault(_homeViewComponent);
 
-	var _makeFilterViewComponent = __webpack_require__(184);
+	var _makeFilterViewComponent = __webpack_require__(185);
 
 	var _makeFilterViewComponent2 = _interopRequireDefault(_makeFilterViewComponent);
 
-	var _sourceNodeComponent = __webpack_require__(185);
+	var _sourceNodeComponent = __webpack_require__(186);
 
 	var _sourceNodeComponent2 = _interopRequireDefault(_sourceNodeComponent);
 
@@ -35295,6 +35295,10 @@
 
 	var _audioInputComponent2 = _interopRequireDefault(_audioInputComponent);
 
+	var _filterListComponent = __webpack_require__(205);
+
+	var _filterListComponent2 = _interopRequireDefault(_filterListComponent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35317,8 +35321,17 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'audioClipInputBox' },
-	        _react2.default.createElement(_audioInputComponent2.default, null)
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'audioClipInputBox' },
+	          _react2.default.createElement(_audioInputComponent2.default, null)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'filter-list' },
+	          _react2.default.createElement(_filterListComponent2.default, null)
+	        )
 	      );
 	    }
 	  }]);
@@ -35368,11 +35381,7 @@
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "audioInputForm" },
-	        _react2.default.createElement(
-	          "button",
-	          { id: "uploadAudioButton", className: "uploadAudioButton" },
-	          "Upload Audio"
-	        )
+	        _react2.default.createElement("input", { type: "file", accept: "audio/*", className: "uploadAudioButton" })
 	      );
 	    }
 	  }]);
@@ -35383,13 +35392,14 @@
 	exports.default = AudioInputComponent;
 
 /***/ },
-/* 184 */
+/* 184 */,
+/* 185 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35532,6 +35542,98 @@
 	  url: '../jackals.wav',
 	  audioCtx: new AudioContext()
 	};
+
+/***/ },
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var FilterList = function (_Component) {
+	  _inherits(FilterList, _Component);
+
+	  function FilterList(props) {
+	    _classCallCheck(this, FilterList);
+
+	    return _possibleConstructorReturn(this, (FilterList.__proto__ || Object.getPrototypeOf(FilterList)).call(this, props));
+	  }
+
+	  _createClass(FilterList, [{
+	    key: "render",
+	    value: function render() {
+
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	          "div",
+	          { className: "" },
+	          "Filter 1"
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "" },
+	          "Filter 2"
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "" },
+	          "Filter 3"
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "" },
+	          "Filter 4"
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "" },
+	          "Filter 5"
+	        )
+	      );
+	    }
+	  }]);
+
+	  return FilterList;
+	}(_react.Component);
+
+	exports.default = FilterList;
 
 /***/ }
 /******/ ]);
